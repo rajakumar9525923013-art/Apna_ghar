@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ApnaGhar.com — Find Your Home</title>
+    <meta name="description" content="ApnaGhar — simple property listing site demo" />
+    <style>
+        /* ----- Reset & base ----- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            line-height: 1.4;
+            color: #0f172a;
+            background: #f8fafc
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        img {
+            max-width: 100%;
+            display: block
+        }
+
+        /* ----- Layout ----- */
+        header {
+            background: linear-gradient(90deg, #0ea5a4, #06b6d4);
+            color: white;
+            padding: 18px 20px
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 18px
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 20px
+        }
+
+        nav ul {
+            display: flex;
+            gap: 14px;
+            list-style: none
+        }
+
+        .btn {
+            background: #fff;
+            color: #0f172a;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600
+        }
+
+        /* ----- Hero ----- */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 28px;
+            padding: 40px 0
+        }
+
+        .hero h1 {
+            font-size: 34px;
+            margin-bottom: 10px
+        }
+
+        .hero p {
+            color: #0f172a;
+            opacity: .85;
+            margin-bottom: 18px
+        }
+
+        .search-card {
+            background: #fff;
+            padding: 14px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.08)
+        }
+
+        .search-row {
+            display: flex;
+            gap: 8px
+        }
+
+        .input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e6eef6;
+            border-radius: 8px
+        }
+
+        .search-btn {
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #0ea5a4;
+            color: white;
+            border: 0;
+            font-weight: 700
+        }
+
+        /* ----- Listings ----- */
+        .section {
+            padding: 34px 0
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(2, 6, 23, 0.06)
+        }
+
+        .card .meta {
+            padding: 12px 14px
+        }
+
+        .card h3 {
+            margin-bottom: 6px;
+            font-size: 18px
+        }
+
+        .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .tag {
+            font-size: 13px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            background: #eef2f7
+        }
+
+        /* ----- Responsive ----- */
+        @media (max-width:980px) {
+            .hero {
+                grid-template-columns: 1fr
+            }
+
+            .grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media (max-width:640px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+
+            nav ul {
+                display: none
+            }
+        }
+
+        /* ----- Footer ----- */
+        footer {
+            background: #031024;
+            color: #dbeafe;
+            padding: 22px 0;
+            margin-top: 22px
+        }
+
+        .footer-grid {
+            display: flex;
+            gap: 34px;
+            flex-wrap: wrap
+        }
+
+        /* ----- Modal ----- */
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 6, 23, 0.5);
+            visibility: hidden;
+            opacity: 0;
+            transition: all .18s
+        }
+
+        .modal.show {
+            visibility: visible;
+            opacity: 1
+        }
+
+        .modal-card {
+            width: min(920px, 96%);
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden
+        }
+
+        .modal-card .content {
+            display: grid;
+            grid-template-columns: 1fr 340px
+        }
+
+        .modal-card img {
+            height: 100%;
+            object-fit: cover
+        }
+
+        .close-btn {
+            background: none;
+            border: 0;
+            font-size: 20px;
+            padding: 10px
+        }
+
+        /* small helpers */
+        .muted {
+            color: #475569
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .mb8 {
+            margin-bottom: 8px
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container nav">
+            <div class="logo">ApnaGhar<span style="opacity:.85;font-weight:500">.com</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#listings">Properties</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div><a class="btn" href="#contact">List Property</a></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <div>
+                <h1>ApnaGhar  sapno ka ghar </h1>
+                <p class="muted">Buy, sell or rent — simple listings with trusted owners. Filter by city, price and
+                    type.</p>
+
+                <div class="search-card">
+                    <div class="search-row">
+                        <input id="q-city" class="input" placeholder="City, locality or landmark" />
+                        <input id="q-maxprice" class="input" placeholder="Max price (₹)" />
+                        <button class="search-btn" onclick="searchListings()">Search</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:18px" id="search-results"></div>
+
+            </div>
+
+            <aside>
+                <div class="search-card">
+                    <h3 style="margin-bottom:8px">Featured</h3>
+                    <img src="https://picsum.photos/seed/house1/600/360" alt="featured"
+                        style="border-radius:8px;margin-bottom:8px" />
+                    <p class="muted">Ready-to-move 3BHK near market. Click any listing to see details.</p>
+                </div>
+            </aside>
+        </section>
+
+        <section id="listings" class="section">
+            <h2 style="margin-bottom:12px">Latest Listings</h2>
+            <div id="cards" class="grid"></div>
+        </section>
+
+        <section id="about" class="section">
+            <h2>About ApnaGhar</h2>
+            <p class="muted">This is a demo property listing website built for learning and small projects. It uses only
+                HTML/CSS/JS and placeholder images. For a production site you'd add a backend, authentication, image
+                uploads and a database.</p>
+        </section>
+
+        <section id="contact" class="section">
+            <h2>Contact / List Your Property</h2>
+            <form onsubmit="submitForm(event)" class="search-card" style="display:grid;gap:8px;">
+                <input id="name" class="input" placeholder="Your name" required />
+                <input id="phone" class="input" placeholder="Phone or email" required />
+                <textarea id="desc" class="input" placeholder="Property details (e.g. 2BHK, 900 sqft, locality)"
+                    style="height:96px"></textarea>
+                <div style="display:flex;gap:10px"><button class="search-btn" type="submit">Send</button><button
+                        class="btn" type="button" onclick="clearForm()">Clear</button></div>
+                <small class="muted">Note: This demo does not send messages to a server — submissions are stored in
+                    localStorage for demo purposes.</small>
+            </form>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container footer-grid">
+            <div>
+                <strong>ApnaGhar.com</strong>
+                <p class="muted">© ApnaGhar — Demo site</p>
+            </div>
+            <div>
+                <p class="muted">Made with ❤️ for learning — features: responsive, search, localStorage demo</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for property details -->
+    <div id="modal" class="modal" onclick="if(event.target.id==='modal') closeModal()">
+        <div class="modal-card">
+            <div class="content">
+                <div style="padding:14px">
+                    <img id="modal-img" src="https://picsum.photos/seed/house1/900/600" alt="property"
+                        style="width:100%;height:360px;object-fit:cover;border-radius:8px;margin-bottom:10px" />
+                    <h3 id="modal-title">Property title</h3>
+                    <p id="modal-desc" class="muted">Property description</p>
+                </div>
+                <aside style="padding:14px;background:#f8fafc">
+                    <div class="flex mb8"><strong id="modal-price">₹0</strong>
+                        <div class="muted"> · <span id="modal-city">City</span></div>
+                    </div>
+                    <div class="mb8"><strong>Details</strong>
+                        <div class="tags" id="modal-tags"></div>
+                    </div>
+                    <div class="mb8"><strong>Contact owner</strong>
+                        <p class="muted" id="modal-contact">Phone / Email</p>
+                    </div>
+                    <div style="margin-top:12px"><button class="search-btn" onclick="closeModal()">Close</button></div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Sample data ---
+        const listings = [
+            { id: 1, title: '3BHK Spacious Flat near Market', city: 'Ludhiana', price: 4200000, area: '1200 sqft', type: 'Resale', img: 'https://picsum.photos/seed/apt1/800/500', contact: '8092235760' },
+            { id: 2, title: '2BHK Builder Floor', city: 'Chandigarh', price: 3600000, area: '900 sqft', type: 'New', img: 'https://picsum.photos/seed/apt2/800/500', contact: '8789851248' },
+            { id: 3, title: 'Studio Apartment for Rent', city: 'Mohali', price: 12000, area: '300 sqft', type: 'Rent', img: 'https://picsum.photos/seed/apt3/800/500', contact: 'owner@apnaghar.com' },
+            { id: 4, title: 'Independent House with Garden', city: 'Patiala', price: 7600000, area: '2000 sqft', type: 'Resale', img: 'https://picsum.photos/seed/apt4/800/500', contact: 'owner4@apnaghar.com' },
+            { id: 5, title: 'Affordable 1BHK', city: 'Amritsar', price: 1800000, area: '600 sqft', type: 'New', img: 'https://picsum.photos/seed/apt5/800/500', contact: '12345@demo.com' },
+            { id: 6, title: 'Penthouse with Terrace', city: 'Jalandhar', price: 12500000, area: '2200 sqft', type: 'Luxury', img: 'https://picsum.photos/seed/apt6/800/500', contact: 'owner6@apnaghar.com' }
+        ];
+
+        // --- Render cards ---
+        const cards = document.getElementById('cards');
+        function renderAll(items) {
+            cards.innerHTML = '';
+            items.forEach(item => {
+                const el = document.createElement('div'); el.className = 'card';
+                el.innerHTML = `
+          <img src="${item.img}" alt="${item.title}" />
+          <div class="meta">
+            <h3>${item.title}</h3>
+            <div class="muted">${item.city} · ${item.area}</div>
+            <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+              <div><strong>₹${numberWithCommas(item.price)}</strong></div>
+              <div><button class="btn" onclick='openModal(${item.id})'>View</button></div>
+            </div>
+            <div style="margin-top:8px" class="tags"><span class="tag">${item.type}</span></div>
+          </div>
+        `;
+                cards.appendChild(el);
+            })
+        }
+
+        function numberWithCommas(x) { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }
+
+        renderAll(listings);
+
+        // --- Search ---
+        function searchListings() {
+            const city = document.getElementById('q-city').value.trim().toLowerCase();
+            const maxprice = parseInt(document.getElementById('q-maxprice').value.replace(/[^0-9]/g, '')) || Infinity;
+            const results = listings.filter(l => {
+                const matchesCity = city ? l.city.toLowerCase().includes(city) || l.title.toLowerCase().includes(city) : true;
+                return matchesCity && l.price <= maxprice;
+            });
+            if (results.length === 0) { document.getElementById('search-results').innerHTML = '<div class="muted">Koi listing nahi mila.</div>'; }
+            else { document.getElementById('search-results').innerHTML = `<div class="muted">${results.length} result(s) found</div>`; }
+            renderAll(results);
+        }
+
+        // --- Modal ---
+        function openModal(id) {
+            const item = listings.find(x => x.id === id); if (!item) return;
+            document.getElementById('modal-img').src = item.img;
+            document.getElementById('modal-title').innerText = item.title;
+            document.getElementById('modal-desc').innerText = `${item.area} · ${item.type}`;
+            document.getElementById('modal-price').innerText = '₹' + numberWithCommas(item.price);
+            document.getElementById('modal-city').innerText = item.city;
+            document.getElementById('modal-contact').innerText = item.contact;
+            const tags = document.getElementById('modal-tags'); tags.innerHTML = '';['Bedrooms', 'Bathroom', 'Furnished'].forEach(t => { const s = document.createElement('span'); s.className = 'tag'; s.innerText = t; tags.appendChild(s) });
+            document.getElementById('modal').classList.add('show');
+        }
+        function closeModal() { document.getElementById('modal').classList.remove('show'); }
+
+        // --- Contact form (demo) ---
+        function submitForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const desc = document.getElementById('desc').value.trim();
+            const saved = JSON.parse(localStorage.getItem('apna_subs') || '[]');
+            saved.push({ name, phone, desc, date: new Date().toISOString() });
+            localStorage.setItem('apna_subs', JSON.stringify(saved));
+            alert('Submitted (demo). Thank you, ' + name);
+            clearForm();
+        }
+        function clearForm() { document.getElementById('name').value = ''; document.getElementById('phone').value = ''; document.getElementById('desc').value = ''; }
+
+        // --- Simple UX: close modal on Esc ---
+        window.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    </script>
+</body>
+
+</html>
